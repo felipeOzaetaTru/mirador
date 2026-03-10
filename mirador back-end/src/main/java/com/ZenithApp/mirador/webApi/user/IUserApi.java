@@ -11,7 +11,7 @@ public interface IUserApi {
     @PostMapping()
     ResponseEntity<GenericResponseDTO> createUser(@RequestBody UserDTO userDTO);
     @GetMapping()
-    ResponseEntity<GenericResponseDTO> readUser(@PathVariable Integer userId);
+    ResponseEntity<GenericResponseDTO> readUser(@RequestBody UserDTO userDTO);
     @GetMapping()
     ResponseEntity<GenericResponseDTO> readUsers();
     @PutMapping()
