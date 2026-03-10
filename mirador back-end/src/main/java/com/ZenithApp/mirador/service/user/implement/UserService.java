@@ -73,7 +73,7 @@ public class UserService implements IUserService {
     public ResponseEntity<GenericResponseDTO> createUser(UserDTO userDTO) {
         try {
             Optional<UserEntity> existeLogin;
-            existeLogin = iUserRepository.findById(userDTO.getId());
+            existeLogin = iUserRepository.findById(userDTO.getId().longValue());
             if(!existeLogin.isPresent()){
                 UserEntity userEntity = userConverter.convertUserDTOToUserEntity(userDTO);
                 iUserRepository.save(userEntity);
@@ -100,9 +100,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<GenericResponseDTO> readUser(Integer userId) {
+    public ResponseEntity<GenericResponseDTO> readUser(String email, String password) {
         try{
-            Optional<UserEntity> userEntityExist = this.iUserRepository.findById(userId);
+
+            Optional<UserEntity> userEntityExist = this.iUserRepository.findUserByEmailAndPassword(email, password);
             if (userEntityExist.isPresent()){
                 UserDTO userDTO = this.userConverter.convertUserEntityToUserDTO(userEntityExist.get());
                 return ResponseEntity.ok(GenericResponseDTO.builder()
@@ -164,7 +165,7 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<GenericResponseDTO> updateUser(UserDTO userDTO) {
         try {
-            Optional<UserEntity> userEntityExist = this.iUserRepository.findById(userDTO.getId());
+            Optional<UserEntity> userEntityExist = this.iUserRepository.findById(userDTO.getId().longValue());
             if (userEntityExist.isPresent()){
                 UserEntity userEntity = this.userConverter.convertUserDTOToUserEntity(userDTO);
                 this.iUserRepository.save(userEntity);
@@ -193,7 +194,7 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<GenericResponseDTO> deleteUser(Integer userId) {
         try {
-            Optional<UserEntity> userEntityExist = this.iUserRepository.findById(userId);
+            Optional<UserEntity> userEntityExist = this.iUserRepository.findById(userId.longValue());
             if(userEntityExist.isPresent()){
                 this.iUserRepository.save(userEntityExist.get());
                 return new ResponseEntity<>(GenericResponseDTO.builder()
